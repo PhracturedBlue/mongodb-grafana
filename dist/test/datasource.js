@@ -93,11 +93,16 @@ var GenericDatasource = exports.GenericDatasource = function () {
   }, {
     key: 'testDatasource',
     value: function testDatasource() {
-      return this.doDirectRequest({
-        url: this.url + '/',
-        data: { db: this.db },
-        method: 'POST'
-      }).then(function (response) {
+      var query = {
+        range: this.timeSrv.timeRange(),
+        targets: [{
+          queryType: 'testConnection',
+          target: '',
+          refId: "A",
+          datasourceId: 0
+        }]
+      };
+      return this.doRequest(query).then(function (response) {
         if (response.status === 200) {
           return { status: response.data.status, message: response.data.message, title: response.data.display_status };
         }
